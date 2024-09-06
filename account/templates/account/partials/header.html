@@ -1,0 +1,37 @@
+{% load static %}
+
+<header class="bg-green-600 shadow-md">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+            <!-- Logo -->
+            <div class="flex-shrink-0">
+                <a href="#" class="text-lg font-bold font-mono text-white">II</a>
+            </div>
+            {% if request.user.is_authenticated %}
+            <div class="hidden md:flex space-x-8">
+                <a href="{% url 'dashboard' %}" class="text-white hover:text-gray-200">Home</a>
+                <a href="#" class="text-white hover:text-gray-200">Images</a>
+                <a href="#" class="text-white hover:text-gray-200">People</a>
+            </div>
+            
+            <div class="relative" x-data="{ open: false }">
+                <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
+                    <img src="{% static 'images/user-avatar.png' %}" alt="pfp" class="w-8 h-8 rounded-full">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                
+                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1">
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
+                    <form action="{% url 'logout' %}" method="post" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        <button type="submit" class="w-full text-left">Logout</button>
+                        {% csrf_token %}
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+</header>
