@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @import url('https://cdn.jsdelivr.net/npm/tailwindcss@^2/dist/tailwind.min.css');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+    <div class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 mt-10">
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-semibold text-gray-800">InterestIntersection</h1>
+        </div>
+        <div>
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="text-center text-gray-600 mt-6">
+            <p>Best regards,<br>II</p>
+            <p><a href="#" class="text-green-600 hover:text-green-800">Visit our website</a></p>
+        </div>
+    </div>
+</body>
+</html>

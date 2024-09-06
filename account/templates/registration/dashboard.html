@@ -3,4 +3,7 @@
 {% block content %}
 <h1>Hi {{ request.user.first_name }}</h1>
 <p>Welcome to your Home.</p>
+
+<br>
+<p>Channge your password <a href="{% url 'password_change' %}" class="text-green-700">here.</a></p>
 {% endblock %}

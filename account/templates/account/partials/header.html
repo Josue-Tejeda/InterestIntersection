@@ -5,7 +5,7 @@
         <div class="flex justify-between h-16 items-center">
             <!-- Logo -->
             <div class="flex-shrink-0">
-                <a href="#" class="text-lg font-bold font-mono text-white">II</a>
+                <a href="{% url 'dashboard' %}" class="text-lg font-bold font-mono text-white">II</a>
             </div>
             {% if request.user.is_authenticated %}
             <div class="hidden md:flex space-x-8">
