@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+<div class="flex justify-center min-h-screen bg-gray-100 py-6 sm:py-12">
+    <div class="max-w-md w-full">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Create an Account</h1>
+        <p class="text-gray-700 text-center mb-6">Please sign up using the form below:</p>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            
+            <div class="flex flex-col">
+                <label for="{{ user_form.username.id_for_label }}" class="block text-gray-700 mb-1">{{ user_form.username.label }}</label>
+                {{ user_form.username.errors }}
+                {{ user_form.username|add_class:"p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500" }}
+            </div>
+            
+            <div class="flex flex-col">
+                <label for="{{ user_form.first_name.id_for_label }}" class="block text-gray-700 mb-1">{{ user_form.first_name.label }}</label>
+                {{ user_form.first_name.errors }}
+                {{ user_form.first_name|add_class:"p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500" }}
+            </div>
+            
+            <div class="flex flex-col">
+                <label for="{{ user_form.email.id_for_label }}" class="block text-gray-700 mb-1">{{ user_form.email.label }}</label>
+                {{ user_form.email.errors }}
+                {{ user_form.email|add_class:"p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500" }}
+            </div>
+            
+            <div class="flex flex-col">
+                <label for="{{ user_form.password.id_for_label }}" class="block text-gray-700 mb-1">{{ user_form.password.label }}</label>
+                {{ user_form.password.errors }}
+                {{ user_form.password|add_class:"p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500" }}
+            </div>
+            
+            <div class="flex flex-col">
+                <label for="{{ user_form.password2.id_for_label }}" class="block text-gray-700 mb-1">{{ user_form.password2.label }}</label>
+                {{ user_form.password2.errors }}
+                {{ user_form.password2|add_class:"p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500" }}
+            </div>
+
+            <div class="flex justify-center">
+                <input type="submit" value="Create my account" class="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition duration-150 ease-in-out cursor-pointer">
+            </div>
+
+            <p class="text-center">
+                <a href="{% url "login" %}" class="text-green-600">I already have an account.</a>
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}
