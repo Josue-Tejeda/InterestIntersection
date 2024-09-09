@@ -13,6 +13,18 @@
 <body class="bg-gray-100">
     {% include 'account/partials/header.html' %}
 
+    {% if messages %}
+    <ul class="messages space-y-2">
+        {% for message in messages %}
+        <li class="px-4 py-3 rounded border {{ message.tags }} bg-blue-50 border-blue-200 text-blue-800 relative flex items-center m-2">
+            <span class="flex-1">{{ message|safe }}</span>
+            <a href="#" class="close text-blue-500 hover:text-blue-700 font-bold ml-2">x</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
     <div id="content" class="max-w-7xl mx-auto p-4">
         {% block content %}
         {% endblock %}
