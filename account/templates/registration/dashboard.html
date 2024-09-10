@@ -1,9 +1,26 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
-{% block content %}
-<h1>Hi {{ request.user.first_name }}</h1>
-<p>Welcome to your Home.</p>
 
-<br>
-<p>Channge your password <a href="{% url 'password_change' %}" class="text-green-700">here.</a></p>
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="flex justify-center min-h-screen bg-gray-100 py-6">
+    <div class="max-w-2xl w-full">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-4">Dashboard</h1>
+        {% with total_images_created=request.user.images_created.count %}
+        <p class="text-gray-700 mb-4">
+            Welcome to your dashboard. You have bookmarked {{ total_images_created }} image{{ total_images_created|pluralize }}.
+        </p>
+        {% endwith %}
+        <p class="text-gray-700 mb-4 ">
+            Drag the following button to your bookmarks toolbar to bookmark images from other websites →
+            <a href="javascript:{% include 'bookmarklet_launcher.js' %}" class="bg-green-600 text-white py-1 px-2 rounded hover:bg-green-700 transition duration-150 ease-in-out cursor-pointer">
+                Bookmark it
+            </a>
+        </p>
+        <p class="text-gray-700">
+            You can also <a href="{% url 'edit' %}" class="text-green-600 hover:text-green-700">edit your profile</a> or
+            <a href="{% url 'password_change' %}" class="text-green-600 hover:text-green-700">change your password</a>.
+        </p>
+    </div>
+</div>
 {% endblock %}

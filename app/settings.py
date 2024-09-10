@@ -1,4 +1,5 @@
 import os
+import mimetypes
 from decouple import config
 from pathlib import Path
 
@@ -10,6 +11,11 @@ SECRET_KEY = 'django-insecure-hip7mj8w3cdq*$mcg@adp*_9gg#5p03p1(+o-6svoxrefc^%$u
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+if DEBUG:
+
+    mimetypes.add_type('application/javascript', '.js', True)
+    mimetypes.add_type('text/css', '.css', True)
 
 ALLOWED_HOSTS = ['interestintersection.com', 'localhost', '127.0.0.1']
 
@@ -24,6 +30,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'images.apps.ImagesConfig',
     
     'django_extensions',
     'social_django',
@@ -127,7 +135,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'app/static'),
+    os.path.join(BASE_DIR, '*/static/'),
 ]
 
 MEDIA_URL = 'media/'
