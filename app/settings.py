@@ -13,7 +13,6 @@ SECRET_KEY = 'django-insecure-hip7mj8w3cdq*$mcg@adp*_9gg#5p03p1(+o-6svoxrefc^%$u
 DEBUG = True
 
 if DEBUG:
-
     mimetypes.add_type('application/javascript', '.js', True)
     mimetypes.add_type('text/css', '.css', True)
 
@@ -54,7 +53,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

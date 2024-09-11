@@ -27,7 +27,7 @@ class Image(models.Model):
     
     description = models.TextField(blank=True)
     
-    created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         indexes = [
