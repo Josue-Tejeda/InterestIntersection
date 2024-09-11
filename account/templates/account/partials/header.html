@@ -9,8 +9,8 @@
             {% if request.user.is_authenticated %}
             <div class="hidden md:flex space-x-8">
                 <a href="{% url 'dashboard' %}" class="text-white hover:text-gray-200">Home</a>
-                <a href="#" class="text-white hover:text-gray-200">Images</a>
-                <a href="#" class="text-white hover:text-gray-200">People</a>
+                <a href="{% url 'images:list' %}" class="text-white hover:text-gray-200">Images</a>
+                <a href="{% url 'user_list' %}" class="text-white hover:text-gray-200">People</a>
             </div>
             
             <div class="relative" x-data="{ open: false }">
@@ -27,7 +27,7 @@
                 </button>
                 
                 <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1">
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+                    <a href="# " class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
                     <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
                     <form action="{% url 'logout' %}" method="post" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                         <button type="submit" class="w-full text-left">Logout</button>

@@ -2,6 +2,7 @@ import os
 import mimetypes
 from decouple import config
 from pathlib import Path
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,6 +18,10 @@ if DEBUG:
     mimetypes.add_type('text/css', '.css', True)
 
 ALLOWED_HOSTS = ['interestintersection.com', 'localhost', '127.0.0.1']
+
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda u: reverse_lazy('user_detail', args=[u.username])
+}
 
 
 # Application definition

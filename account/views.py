@@ -1,9 +1,16 @@
 from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
-from .models import Profile
+from .models import Contact, Profile
+
+User = get_user_model()
 
 @login_required
 def dashboard(request):
@@ -57,3 +64,57 @@ def edit(request):
     }
     
     return render(request, template, context)
+
+
+@login_required
+def user_list(request):
+    template = 'user/list.html'
+    users = User.objects.filter(is_active=True)
+    paginator = Paginator(users, 8)
+    page = request.GET.get('page')
+    
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
+    
+    context = {
+        'section': 'people',
+        'users': users,
+    }
+    
+    return render(request, template, context)
+
+
+@login_required
+def user_detail(request, username):
+    template = 'user/detail.html'
+    user_detail = get_object_or_404(User, username=username, is_active=True)
+    
+    context = {
+        'section': 'people',
+        'user_detail': user_detail,
+    }
+    
+    return render(request, template, context)
+
+
+@login_required
+@require_POST
+def user_follow(request):
+    user_id = request.POST.get('id')
+    action = request.POST.get('action')
+    
+    if user_id and action:
+        try:
+            user = User.objects.get(id=user_id)
+            if action == 'follow':
+                Contact.objects.get_or_create(user_from=request.user, user_to=user)
+            else:
+                Contact.objects.filter(user_from=request.user, user_to=user).delete()
+            return JsonResponse({'status': 'ok'})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error'})
+    return JsonResponse({'status': 'error'})

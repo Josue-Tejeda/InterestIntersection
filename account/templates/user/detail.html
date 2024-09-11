@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block title %}{{ user_detail.first_name }}{% endblock %}
+
+{% block content %}
+<!-- Profile Information Container -->
+<div class="profile-info bg-white rounded-lg shadow-md p-6 flex flex-col items-center space-y-4">
+    <h1 class="text-3xl font-semibold text-center mb-4">{{ user_detail.get_full_name }}</h1>
+
+    <!-- User Avatar -->
+    {% if user_detail.profile.avatar %}
+    {% thumbnail user_detail.profile.avatar 180x180 crop="center" as image %}
+    <img src="{{ image.url }}" alt="{{ user_detail.get_full_name }}" class="w-36 h-36 rounded-full object-cover">
+    {% else %}
+    <!-- Placeholder with Initial -->
+    <div class="w-36 h-36 flex items-center justify-center rounded-full bg-green-600 text-white text-4xl font-bold">
+        {{ user_detail.get_full_name|slice:":1"|upper }}
+    </div>
+    {% endif %}
+
+    <!-- Follower Count -->
+    {% with total_followers=user_detail.followers.count %}
+    <span class="count text-lg text-gray-600">
+        <span class="total font-semibold">{{ total_followers }}</span>
+        follower{{ total_followers|pluralize }}
+    </span>
+    {% endwith %}
+
+    <!-- Follow/Unfollow Button -->
+    {% if request.user != user_detail %}
+    <a href="#" data-id="{{ user_detail.id }}" data-action="{% if request.user not in user_detail.followers.all %}follow{% else %}unfollow{% endif %}"
+       class="follow-button px-4 py-2 text-white font-semibold rounded transition duration-150 ease-in-out
+              {% if request.user not in user_detail.followers.all %}bg-blue-500 hover:bg-blue-600{% else %}bg-red-500 hover:bg-red-600{% endif %}">
+        {% if request.user not in user_detail.followers.all %}
+        Follow
+        {% else %}
+        Unfollow
+        {% endif %}
+    </a>
+    {% endif %}
+</div>
+
+<!-- User's Images Container -->
+<div id="image-list" class="image-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8">
+    {% include "image/list_images.html" with images=user_detail.images_created.all %}
+</div>
+{% endblock %}
+
+{% block domready %}
+  const url = '{% url "user_follow" %}';
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  
+  var options = {
+    method: 'POST',
+    headers: {'X-CSRFToken': csrftoken},
+    mode: 'same-origin'
+  };
+
+  // Add event listener to the follow/unfollow button
+  document.querySelector('a.follow-button').addEventListener('click', function(e) {
+    e.preventDefault();
+    var followButton = this;
+
+    // Add request body
+    var formData = new FormData();
+    formData.append('id', followButton.dataset.id);
+    formData.append('action', followButton.dataset.action);
+    options['body'] = formData;
+
+    // Send HTTP request
+    fetch(url, options)
+    .then(response => response.json())
+    .then(data => {
+      if (data['status'] === 'ok') {
+        var previousAction = followButton.dataset.action;
+
+        // Toggle button text and data-action
+        var action = previousAction === 'follow' ? 'unfollow' : 'follow';
+        followButton.dataset.action = action;
+        followButton.innerHTML = action.charAt(0).toUpperCase() + action.slice(1);
+
+        // Update button styles based on the new action
+        followButton.classList.toggle('bg-blue-500', action === 'follow');
+        followButton.classList.toggle('hover:bg-blue-600', action === 'follow');
+        followButton.classList.toggle('bg-red-500', action === 'unfollow');
+        followButton.classList.toggle('hover:bg-red-600', action === 'unfollow');
+
+        // Update follower count
+        var followerCount = document.querySelector('span.count .total');
+        var totalFollowers = parseInt(followerCount.innerHTML);
+        followerCount.innerHTML = previousAction === 'follow' ? totalFollowers + 1 : totalFollowers - 1;
+      }
+    });
+  });
+{% endblock %}
