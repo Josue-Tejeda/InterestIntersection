@@ -16,7 +16,8 @@
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
                     {% if user.profile.avatar %}
-                    <img src="{{ user.profile.avatar.url }}" alt="pfp" class="w-8 h-8 rounded-full">
+                    {% load thumbnail %}
+                    <img src="{% thumbnail user.profile.avatar 50x50 crop %}" alt="pfp" class="w-8 h-8 rounded-full">
                     {% else %}
                     <img src="{% static 'images/user-avatar.png' %}" alt="pfp" class="w-8 h-8 rounded-full">
                     {% endif %}
