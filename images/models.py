@@ -17,6 +17,8 @@ class Image(models.Model):
         blank=True
     )
     
+    total_likes = models.PositiveIntegerField(db_index=True, default=0)
+    
     title = models.CharField(max_length=200)
     
     slug = models.SlugField(max_length=200, blank=True)

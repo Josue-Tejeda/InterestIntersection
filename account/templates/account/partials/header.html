@@ -15,11 +15,13 @@
             
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
-                    {% if user.profile.avatar %}
+                    {% if request.user.profile.avatar %}
                     {% load thumbnail %}
-                    <img src="{% thumbnail user.profile.avatar 50x50 crop %}" alt="pfp" class="w-8 h-8 rounded-full">
+                    <img src="{% thumbnail request.user.profile.avatar 50x50 crop %}" alt="pfp" class="w-8 h-8 rounded-full">
                     {% else %}
-                    <img src="{% static 'images/user-avatar.png' %}" alt="pfp" class="w-8 h-8 rounded-full">
+                    <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-400 text-white text-1xl font-bold mx-auto">
+                        {{ user.get_full_name|slice:":1"|upper }}
+                    </div>
                     {% endif %}
                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>

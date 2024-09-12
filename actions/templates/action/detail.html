@@ -1,0 +1,47 @@
+{% load thumbnail %}
+
+{% with user=action.user profile=action.user.profile %}
+<div class="action flex items-start space-x-4 p-4 bg-white rounded-lg shadow-md mb-4">
+    <!-- Profile Image and Action Target -->
+    <div class="images flex items-center space-x-2">
+        <!-- User Profile Photo -->
+        {% if profile.avatar %}
+        {% thumbnail user.profile.avatar "80x80" crop="100%" as image %}
+        <a href="{{ user.get_absolute_url }}" class="block">
+            <img src="{{ image.url }}" alt="{{ user.get_full_name }}" class="w-20 h-20 rounded-full object-cover border-2 border-gray-200">
+        </a>
+        {% endif %}
+
+        <!-- Target Image if Available -->
+        {% if action.target %}
+        {% with target=action.target %}
+        {% if target.image %}
+        {% thumbnail target.image "80x80" crop="100%" as image %}
+        <a href="{{ target.get_absolute_url }}" class="block">
+            <img src="{{ image.url }}" class="w-20 h-20 rounded-full object-cover border-2 border-gray-200">
+        </a>
+        {% endif %}
+        {% endwith %}
+        {% endif %}
+    </div>
+
+    <!-- Action Information -->
+    <div class="info flex-1">
+        <p class="text-gray-700">
+            <span class="text-sm text-gray-500">{{ action.created_at|timesince }} ago</span>
+            <br />
+            <a href="{{ user.get_absolute_url }}" class="text-blue-600 font-semibold hover:underline">
+                {{ user.first_name }}
+            </a>
+            {{ action.verb }}
+            {% if action.target %}
+            {% with target=action.target %}
+            <a href="{{ target.get_absolute_url }}" class="text-blue-600 font-semibold hover:underline">
+                {{ target }}
+            </a>
+            {% endwith %}
+            {% endif %}
+        </p>
+    </div>
+</div>
+{% endwith %}

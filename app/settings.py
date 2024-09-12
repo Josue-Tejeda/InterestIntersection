@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'images.apps.ImagesConfig',
+    'actions.apps.ActionsConfig',
     
+    'debug_toolbar',
     'django_extensions',
     'social_django',
     'widget_tweaks',
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -140,7 +143,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '*/static/'),
+    os.path.join(BASE_DIR, 'app/static/'),
+    os.path.join(BASE_DIR, 'images/static/'),
 ]
 
 MEDIA_URL = 'media/'
@@ -160,3 +164,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_OAUTH2_SECRET')
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
