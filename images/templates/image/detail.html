@@ -12,22 +12,37 @@
                 <img src="{% thumbnail image.image 300x0 %}" class="image-detail w-full max-w-2xl mx-auto rounded-lg shadow-lg mb-8" alt="{{ image.title }}">
             </a>
             <!-- Like button with heart icon -->
-            <div class="absolute top-4 right-4 flex flex-col items-center">
-                <button 
-                    data-id="{{ image.id }}" 
-                    data-action="{% if request.user in users_like %}un{% endif %}like" 
-                    class="like-button bg-green-500 hover:bg-green-600 text-white p-2 rounded-full shadow-md transition"
-                    title="{% if request.user in users_like %}Unlike{% else %}Like{% endif %}">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="{% if request.user in users_like %}currentColor{% else %}none{% endif %}" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                    </svg>
-                </button>
-                <!-- Likes count with click interaction -->
-                <span 
-                    class="text-sm font-semibold mt-1 text-gray-700 cursor-pointer" 
-                    @click="toggleLikes = !toggleLikes">
-                    {{ total_likes }}
-                </span>
+            <div class="absolute top-2 right-2 flex flex-col items-center">
+                <div class="flex flex-col items-center">
+                    <button 
+                        data-id="{{ image.id }}" 
+                        data-action="{% if request.user in users_like %}un{% endif %}like" 
+                        class="like-button text-white rounded-full shadow-md transition"
+                        title="{% if request.user in users_like %}Unlike{% else %}Like{% endif %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="{% if request.user in users_like %}currentColor{% else %}none{% endif %}" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                    </button>
+                    <span 
+                        class="text-sm font-semibold text-white cursor-pointer" 
+                        @click="toggleLikes = !toggleLikes">
+                        {{ total_likes }}
+                    </span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="text-white rounded-full shadow-md transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <!-- Views count -->
+                        <span class="text-white text-xs font-semibold rounded-full w-6 h-6 flex items-center justify-center">
+                            {{ total_views }}
+                        </span>
+                    </div>
+                    
+                </div>
+                
                 <!-- Users who liked the image, shown when clicked -->
                 <div 
                     x-show="toggleLikes" 

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Images Ranking{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-10 px-6 bg-gray-50">
+    <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Images Ranking</h1>
+    <ol class="space-y-4 max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        {% for image in most_viewed %}
+        <li class="flex items-center space-x-4 p-4 bg-gray-100 rounded-md hover:bg-gray-200 transition">
+            <div class="flex-none">
+                {% load thumbnail %}
+                {% thumbnail image.image 50x50 crop="center" as im %}
+                <img src="{{ im.url }}" alt="{{ image.title }}" class="w-12 h-12 object-cover rounded-full shadow-sm">
+            </div>
+            <div class="flex-1">
+                <a href="{{ image.get_absolute_url }}" class="text-lg font-semibold text-green-600 hover:underline">
+                    {{ image.title }}
+                </a>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-sm text-gray-600 text-right">{{ image.total_views }} views</span>
+                <span class="text-sm text-gray-600 text-right">{{ image.total_likes }} likes</span>
+            </div>
+        </li>
+        {% empty %}
+        <p class="text-center text-gray-500 italic">No images to display.</p>
+        {% endfor %}
+    </ol>
+</div>
+{% endblock %}

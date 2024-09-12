@@ -1,3 +1,5 @@
+import redis
+from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
@@ -8,6 +10,12 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from .models import Image
 from .forms import ImageCreateForm
 from actions.utils import create_action
+
+r = redis.StrictRedis(
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
+    db=settings.REDIS_DB
+    )
 
 @login_required
 def image_create(request):
@@ -29,12 +37,15 @@ def image_create(request):
 def image_detail(request, id, slug):
     template = 'image/detail.html'
     image = get_object_or_404(Image, id=id, slug=slug)
+    total_views = r.incr(f'image:{image.id}:views')
+    r.zincrby('image_ranking', 1, image.id)
     
     context= {
         'section': 'images',
         'image': image,
         'total_likes': image.users_like.count(),
-        'users_like': image.users_like.all()
+        'users_like': image.users_like.all(),
+        'total_views': total_views
         }
     
     return render(request, template, context)
@@ -80,3 +91,26 @@ def image_list(request):
 
     template = 'image/list_images.html' if images_only else 'image/list.html'
     return render(request, template, {'section': 'images', 'images': images})
+
+
+@login_required
+def image_ranking(request):
+    template = 'image/ranking.html'
+    
+    image_ranking = r.zrange('image_ranking', 0, -1, desc=True)[:10]
+    image_ranking_ids = [int(id) for id in image_ranking]
+    
+    most_viewed = list(Image.objects.filter(id__in=image_ranking_ids))
+    most_viewed.sort(key=lambda x: image_ranking_ids.index(x.id))
+    
+    image_views = {int(id): int(r.get(f'image:{id}:views') or 0) for id in image_ranking_ids}
+
+    for image in most_viewed:
+        image.total_views = image_views.get(image.id, 0)
+    
+    context = {
+        'section': 'image_ranking',
+        'most_viewed': most_viewed
+    }
+    
+    return render(request, template, context)
