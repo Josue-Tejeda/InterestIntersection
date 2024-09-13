@@ -4,22 +4,18 @@
 {% block title %}{{ user_detail.first_name }}{% endblock %}
 
 {% block content %}
-<!-- Profile Information Container -->
 <div class="profile-info bg-white rounded-lg shadow-md p-6 flex flex-col items-center space-y-4">
     <h1 class="text-3xl font-semibold text-center mb-4">{{ user_detail.get_full_name }}</h1>
 
-    <!-- User Avatar -->
     {% if user_detail.profile.avatar %}
     {% thumbnail user_detail.profile.avatar 180x180 crop="center" as image %}
     <img src="{{ image.url }}" alt="{{ user_detail.get_full_name }}" class="w-36 h-36 rounded-full object-cover">
     {% else %}
-    <!-- Placeholder with Initial -->
     <div class="w-36 h-36 flex items-center justify-center rounded-full bg-green-600 text-white text-4xl font-bold">
         {{ user_detail.get_full_name|slice:":1"|upper }}
     </div>
     {% endif %}
 
-    <!-- Follower Count -->
     {% with total_followers=user_detail.followers.count %}
     <span class="count text-lg text-gray-600">
         <span class="total font-semibold">{{ total_followers }}</span>
@@ -27,7 +23,15 @@
     </span>
     {% endwith %}
 
-    <!-- Follow/Unfollow Button -->
+    {% if request.user == user_detail %}
+    <a href="{% url 'edit' %}" class="flex items-center space-x-2 px-4 py-2 mt-2 text-blue-500 border border-blue-500 rounded hover:bg-blue-50 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4h-7a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7m-5-7l3 3M18 2a2.5 2.5 0 113.5 3.5L7 20.5a4.992 4.992 0 01-2 1.5l-3 1 1-3a4.992 4.992 0 011.5-2L18 2z"></path>
+        </svg>
+        <span>Edit Profile</span>
+    </a>
+    {% endif %}
+
     {% if request.user != user_detail %}
     <a href="#" data-id="{{ user_detail.id }}" data-action="{% if request.user not in user_detail.followers.all %}follow{% else %}unfollow{% endif %}"
        class="follow-button px-4 py-2 text-white font-semibold rounded transition duration-150 ease-in-out
@@ -41,7 +45,6 @@
     {% endif %}
 </div>
 
-<!-- User's Images Container -->
 <div id="image-list" class="image-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8">
     {% include "image/list_images.html" with images=user_detail.images_created.all %}
 </div>

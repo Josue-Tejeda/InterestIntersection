@@ -49,3 +49,4 @@ user_model.add_to_class(
         symmetrical=False
     )
 )
+user_model._meta.get_field('email').blank = False

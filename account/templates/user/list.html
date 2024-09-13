@@ -5,32 +5,29 @@
 
 {% block content %}
 <h1 class="text-2xl font-semibold text-center mb-6">People</h1>
-
-<!-- People List Container -->
-<div id="people-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
-    {% for user in users %}
-    <!-- User Card -->
-    <div class="overflow-hidden transition-transform transform hover:scale-105">
-        <a href="{{ user.get_absolute_url }}" class="block p-4 text-center">
-            {% if user.profile.avatar %}
-            {% thumbnail user.profile.avatar 180x180 crop="center" as image %}
-            <img src="{{ image.url }}" alt="{{ user.get_full_name }}" class="w-36 h-36 rounded-full mx-auto object-cover">
-            {% else %}
-            <!-- Placeholder with First Letter of Name -->
-            <div class="w-36 h-36 flex items-center justify-center rounded-full bg-green-600 text-white text-4xl font-bold mx-auto">
-                {{ user.get_full_name|slice:":1"|upper }}
-            </div>
-            {% endif %}
-        </a>
-        <!-- User Info -->
-        <div class="pt-2">
-            <a href="{{ user.get_absolute_url }}" class="block text-lg font-semibold text-gray-800 hover:text-green-600 text-center">
-                {{ user.get_full_name }}
+<div class="max-w-2xl mx-auto py-8">
+    <div id="people-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {% for user in users %}
+        <div class="overflow-hidden transition-transform transform hover:scale-105">
+            <a href="{{ user.get_absolute_url }}" class="block p-4 text-center">
+                {% if user.profile.avatar %}
+                {% thumbnail user.profile.avatar 180x180 crop="center" as image %}
+                <img src="{{ image.url }}" alt="{{ user.get_full_name }}" class="w-36 h-36 rounded-full mx-auto object-cover">
+                {% else %}
+                <div class="w-36 h-36 flex items-center justify-center rounded-full bg-green-600 text-white text-4xl font-bold mx-auto">
+                    {{ user.get_full_name|slice:":1"|upper }}
+                </div>
+                {% endif %}
             </a>
+            <div class="pt-2">
+                <a href="{{ user.get_absolute_url }}" class="block text-lg font-semibold text-gray-800 hover:text-green-600 text-center">
+                    {{ user.get_full_name }}
+                </a>
+            </div>
         </div>
+        {% empty %}
+        <p class="col-span-full text-center text-gray-500">No people found.</p>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p class="col-span-full text-center text-gray-500">No people found.</p>
-    {% endfor %}
 </div>
 {% endblock %}
